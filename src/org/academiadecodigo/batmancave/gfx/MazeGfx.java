@@ -14,12 +14,18 @@ public class MazeGfx {
     private int cellSize;
     private Picture player;
     private Picture ghost;
+    private int playerDelay = 50;
+
+    public int getGhostDelay() {
+        return ghostDelay;
+    }
+
+    private int ghostDelay = 1000;
+
 
     public int getPlayerDelay() {
         return playerDelay;
     }
-
-    private int playerDelay = 50;
 
     public MazeGfx(Maze maze) {
         this.maze = maze;
@@ -99,6 +105,12 @@ public class MazeGfx {
 
         player.translate((double)(col*cellSize),(double)(row * cellSize));
         player.draw();
+    }
+
+    public void moveGhost (int col, int row) {
+
+        ghost.translate((double)(col*cellSize),(double)(row * cellSize));
+        ghost.draw();
     }
 
 

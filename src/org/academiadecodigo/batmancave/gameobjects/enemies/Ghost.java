@@ -18,6 +18,7 @@ public class Ghost extends Enemy {
     private Position pos;
     private MovementDetector movementDetector;
     private MazeGfx mazeGfx;
+    private int value;
 
     public Ghost() {
         ghostLevel = 1;
@@ -27,13 +28,28 @@ public class Ghost extends Enemy {
 
     //move method
     public void move () {
-
+        value = (int) Math.round(Math.random()*4);
         switch (ghostLevel) {
             case 1:
                 // Level 1 behaviour: random movement
+                if (movementDetector.checkMove(Directions.UP)) {
+                    pos.changePosition(0,-1);
+                    mazeGfx.moveGhost(0, -1);
+                    try {
+                        Thread.sleep(mazeGfx.getGhostDelay());
+                    } catch (InterruptedException ex) {
+                        System.out.println("");
+                    }
 
-
-
+                } else if (movementDetector.checkMove(Directions.LEFT)) {
+                    pos.changePosition(0,-1);
+                    mazeGfx.moveGhost(0, -1);
+                    try {
+                        Thread.sleep(mazeGfx.getGhostDelay());
+                    } catch (InterruptedException ex) {
+                        System.out.println("");
+                    }
+                }
 
 
                 break;
