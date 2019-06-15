@@ -1,6 +1,6 @@
 package org.academiadecodigo.batmancave.gameobjects.Usables;
 
-import javafx.geometry.Pos;
+//wimport javafx.geometry.Pos;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Position;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;

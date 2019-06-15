@@ -1,6 +1,5 @@
 package org.academiadecodigo.batmancave;
 
-import javafx.scene.text.Text;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
@@ -10,9 +9,12 @@ import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
 import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
-import org.academiadecodigo.simplegraphics.pictures.Picture;
 
+import javax.sound.sampled.AudioInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class Game {
 
@@ -32,11 +34,16 @@ public class Game {
 
     //Audio
     private Sound sound = new Sound();
-    private File mainTheme = new File("./resources/startSong.wav");
+
+    private File mainTheme = new File("workspace/myrepos/batman-cave/resources/startSong.wav");
     private File boo = new File("./resources/GOTCHA_BITCH.wav");
     private File escapeSong = new File("./resources/Danger.wav");
     private File powerUp = new File("./resources/Power_1.wav");
     private File hit = new File("./resources/moaning-woman_1.wav");
+
+
+
+    private URL file = getClass().getResource("resources/Danger.wav");
 
     //Constructor
     public Game() {
@@ -48,6 +55,7 @@ public class Game {
     }
 
     //Menu method
+    /*
     public void menu(){
 
         try{
@@ -63,6 +71,7 @@ public class Game {
             System.out.println("Interrupted Exception");
         }
     }
+     */
 
     //Init Method
     public void init() {
@@ -155,6 +164,7 @@ public class Game {
                         sound.playSFX(boo);
                         dead.reset();
                         mazeGfx.playerCaught(dead.getType());
+                        mazeGfx.refreshMaze();
                     }
                 }
 
@@ -165,6 +175,8 @@ public class Game {
                 sound.playSFX(hit);
             }
 
+
+
         }
 
         if (playerOne.getHasFlag()) {
@@ -173,12 +185,10 @@ public class Game {
             points[1]++;
         }
 
-        Text winner = new Text();
-
-
         //restart();
     }
 
+    /*
 
     private void restart() {
 
@@ -200,10 +210,11 @@ public class Game {
             System.out.println("Interrupted Exception");
         }
     }
-
+*/
     private enum GameStage {
         SEARCHING,
         RETRIEVING
     }
+
 
 }

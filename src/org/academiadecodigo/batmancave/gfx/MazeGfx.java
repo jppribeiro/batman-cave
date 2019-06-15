@@ -50,9 +50,9 @@ public class MazeGfx {
         }
 
 
-        playerOne = new Picture( cellSize + PADDING, cellSize , "Player/player 1 30x30.png");
+        playerOne = new Picture( cellSize + PADDING, cellSize , "resources/Player/player 1 30x30.png");
 
-        playerTwo = new Picture( (mazeLayout.length-2) * cellSize + PADDING, (mazeLayout[0].length - 2) * cellSize, "Player/player 2 30x30.png");
+        playerTwo = new Picture( (mazeLayout.length-2) * cellSize + PADDING, (mazeLayout[0].length - 2) * cellSize, "resources/Player/player 2 30x30.png");
 
         //DRAW MAZE AROUND PLAYER
         drawMaze();
@@ -76,20 +76,20 @@ public class MazeGfx {
 
                 if(row == mazeLayout[0].length - 1) {
                     // Bottom line
-                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "Wall/bottom_wall.png");
+                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "resources/Wall/bottom_wall.png");
                 } else if (mazeLayout[col][row+1].getType() == CellType.ROOM) {
                     // Wall with room below
-                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "Wall/bottom_wall.png");
+                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "resources/Wall/bottom_wall.png");
                 } else {
                     // regular wall
-                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "Wall/wall.png");
+                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "resources/Wall/wall.png");
                 }
                 break;
             case ROOM:
                 if(col == flagStart.getCol() && row == flagStart.getRow()) {
-                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "Wall/power_crystal.png");
+                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "resources/Wall/power_crystal.png");
                 } else {
-                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "Wall/room.png");
+                    cellTexture = new Picture(col*cellSize+PADDING, row*cellSize+PADDING, "resources/Wall/room.png");
                 }
                 break;
             default:
@@ -159,9 +159,9 @@ public class MazeGfx {
 
     public void drawGhost(Ghost[] ghosts) {
 
-        ghost1 = new Picture(ghosts[0].getPos().getCol()*cellSize+PADDING, ghosts[0].getPos().getRow()*cellSize + PADDING, "ghost30.png");
+        ghost1 = new Picture(ghosts[0].getPos().getCol()*cellSize+PADDING, ghosts[0].getPos().getRow()*cellSize + PADDING, "resources/ghost30.png");
 
-        ghost2 = new Picture(ghosts[1].getPos().getCol()*cellSize+PADDING, ghosts[1].getPos().getRow()*cellSize+PADDING, "ghost30.png");
+        ghost2 = new Picture(ghosts[1].getPos().getCol()*cellSize+PADDING, ghosts[1].getPos().getRow()*cellSize+PADDING, "resources/ghost30.png");
 
         hasGhosts = true;
 
@@ -172,12 +172,12 @@ public class MazeGfx {
         playerOne.translate((double)(col*cellSize),(double)(row * cellSize));
         playerOne.delete();
         if(players[0].getHasFlag()) {
-            playerOne = new Picture(playerOne.getX(), playerOne.getY(), "Player/player 1 30x30 super.png" );
+            playerOne = new Picture(playerOne.getX(), playerOne.getY(), "resources/Player/player 1 30x30 super.png" );
             mazeLayout[flagStart.getCol()][flagStart.getRow()].getCellGfx().delete();
             mazeLayout[flagStart.getCol()][flagStart.getRow()].setCellGfx(new Picture(flagStart.getCol()*cellSize+PADDING, flagStart.getRow()*cellSize+PADDING, "Wall/room.png"));
             mazeLayout[flagStart.getCol()][flagStart.getRow()].getCellGfx().draw();
         } else {
-            playerOne = new Picture(playerOne.getX(), playerOne.getY(), "Player/player 1 30x30.png" );
+            playerOne = new Picture(playerOne.getX(), playerOne.getY(), "resources/Player/player 1 30x30.png" );
         }
         drawMaze();
         //drawFlag();
@@ -189,12 +189,12 @@ public class MazeGfx {
         playerTwo.translate((double)(col*cellSize),(double)(row * cellSize));
         playerTwo.delete();
         if(players[1].getHasFlag()) {
-            playerTwo = new Picture( playerTwo.getX(), playerTwo.getY(), "Player/player 2 30x30 super.png");
+            playerTwo = new Picture( playerTwo.getX(), playerTwo.getY(), "resources/Player/player 2 30x30 super.png");
             mazeLayout[flagStart.getCol()][flagStart.getRow()].getCellGfx().delete();
-            mazeLayout[flagStart.getCol()][flagStart.getRow()].setCellGfx(new Picture(flagStart.getCol()*cellSize+PADDING, flagStart.getRow()*cellSize+PADDING, "Wall/room.png"));
+            mazeLayout[flagStart.getCol()][flagStart.getRow()].setCellGfx(new Picture(flagStart.getCol()*cellSize+PADDING, flagStart.getRow()*cellSize+PADDING, "resources/Wall/room.png"));
             mazeLayout[flagStart.getCol()][flagStart.getRow()].getCellGfx().draw();
         } else {
-            playerTwo = new Picture( playerTwo.getX(), playerTwo.getY(), "Player/player 2 30x30.png");
+            playerTwo = new Picture( playerTwo.getX(), playerTwo.getY(), "resources/Player/player 2 30x30.png");
         }
         drawMaze();
         //drawFlag();
@@ -233,10 +233,10 @@ public class MazeGfx {
     public void playerCaught(PlayersSelector playersSelector) {
         if (playersSelector == PlayersSelector.ONE) {
             playerOne.delete();
-            playerOne = new Picture( cellSize + PADDING, cellSize , "Player/player 1 30x30.png");
+            playerOne = new Picture( cellSize + PADDING, cellSize , "resources/Player/player 1 30x30.png");
         } else {
             playerTwo.delete();
-            playerTwo = new Picture( (mazeLayout.length-2) * cellSize + PADDING, (mazeLayout[0].length - 2) * cellSize, "Player/player 2 30x30.png");
+            playerTwo = new Picture( (mazeLayout.length-2) * cellSize + PADDING, (mazeLayout[0].length - 2) * cellSize, "resources/Player/player 2 30x30.png");
         }
 
         flag.setPos(flagStart);
@@ -270,5 +270,11 @@ public class MazeGfx {
         flagStart = flag.getPos();
     }
 
+
+    public void refreshMaze() {
+        drawMaze();
+        movePlayerTwo(0,0);
+        movePlayerOne(0,0);
+    }
 
 }

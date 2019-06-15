@@ -6,6 +6,12 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class Menu implements KeyboardHandler {
 
     private Game game;
@@ -27,17 +33,18 @@ public class Menu implements KeyboardHandler {
 
 
     public Menu(){
-        bg = new Picture(10,10,"Menu/background.png");
+
+        bg = new Picture(10,10,"resources/Menu/background.png");
         bg.draw();
-        title = new Picture(376, 180, "Menu/tittle.png");
-        start = new Picture(483, 550, "Menu/buttons/Start.png");
-        quit = new Picture(483, 650, "Menu/buttons/Quit.png");
-        button = new Picture(483, 550, "Menu/buttons/button.png");
-        button1 = new Picture(483, 650, "Menu/buttons/button.png");
-        buttonPressed = new Picture(483, 550, "Menu/buttons/button pressed.png");
-        buttonPressed1 = new Picture(483, 650, "Menu/buttons/button pressed.png");
-        pressSpace = new Picture(539, 565, "Menu/buttons/Press space.png");
-        pressEsc = new Picture(539, 665, "Menu/buttons/Press esc.png");
+        title = new Picture(376, 180, "resources/Menu/tittle.png");
+        start = new Picture(483, 550, "resources/Menu/buttons/Start.png");
+        quit = new Picture(483, 650, "resources/Menu/buttons/Quit.png");
+        button = new Picture(483, 550, "resources/Menu/buttons/button.png");
+        button1 = new Picture(483, 650, "resources/Menu/buttons/button.png");
+        buttonPressed = new Picture(483, 550, "resources/Menu/buttons/button_pressed.png");
+        buttonPressed1 = new Picture(483, 650, "resources/Menu/buttons/button_pressed.png");
+        pressSpace = new Picture(539, 565, "resources/Menu/buttons/Press_space.png");
+        pressEsc = new Picture(539, 665, "resources/Menu/buttons/Press_esc.png");
         title.draw();
         button.draw();
         button1.draw();
