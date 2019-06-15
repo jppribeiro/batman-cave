@@ -27,8 +27,6 @@ public class Main {
 
         mazeGfx.init();
 
-
-
         Player player = new Player();
 
         MovementDetector movementDetector = new MovementDetector(maze, player);
@@ -45,16 +43,5 @@ public class Main {
 
         game.menu();
 
-        game.init();
-
-        try {
-            game.start();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    //Menu menu = new Menu();
     }
-
-
-
 }

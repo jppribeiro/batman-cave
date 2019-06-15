@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class Game {
 
-    private Menu menu;
+    private Menu menu = new Menu();
     private Maze maze;
     private MazeGfx mazeGfx;
     private MovementDetector movementDetector;
@@ -47,10 +47,6 @@ public class Game {
 
 
     public void menu(){
-        menu = new Menu();
-
-
-
 
         try{
             playThemeSong();
@@ -62,6 +58,9 @@ public class Game {
 
         }
 
+        menu.keyboard();
+        menu.gameOver();
+        menu.startMenu();
 
         while (!menu.isGameStart()){
             try {
@@ -143,23 +142,17 @@ public class Game {
         } else {
             points[1]++;
         }
-
+        menu.gameOver();
+        menu.startMenu();
         restart();
     }
 
 
     private void restart() {
-
-
         flag.resetFlag();
-
         playerOne.reset();
         playerTwo.reset();
-
-
-
         //flag = new Flag(21, 15);
-
         maze.init();
         maze.generate();
 
