@@ -1,5 +1,6 @@
 package org.academiadecodigo.batmancave.Player;
 
+import org.academiadecodigo.batmancave.PlayersSelector;
 import org.academiadecodigo.batmancave.maze.Directions;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
@@ -9,7 +10,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 public class PlayerOne extends Player implements KeyboardHandler {
 
     public PlayerOne(int col, int row) {
-        super(col, row);
+        super(col, row, PlayersSelector.ONE);
     }
 
     @Override
@@ -59,6 +60,7 @@ public class PlayerOne extends Player implements KeyboardHandler {
                 if (movementDetector.checkMove(Directions.RIGHT, this)) {
                     pos.changePosition(1, 0);
                     mazeGfx.movePlayerOne(1, 0);
+                    System.out.println("moved once");
                 }
                 break;
             case KeyboardEvent.KEY_S:

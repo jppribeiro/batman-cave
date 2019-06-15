@@ -1,13 +1,10 @@
 package org.academiadecodigo.batmancave.Player;
 
+import org.academiadecodigo.batmancave.PlayersSelector;
 import org.academiadecodigo.batmancave.Position;
-import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
-import org.academiadecodigo.batmancave.maze.Directions;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
-import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
-import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 public abstract class Player implements KeyboardHandler {
@@ -17,10 +14,12 @@ public abstract class Player implements KeyboardHandler {
     protected MovementDetector movementDetector;
     protected MazeGfx mazeGfx;
     private boolean hasFlag;
+    private PlayersSelector type;
 
-    public Player(int col, int row) {
+    public Player(int col, int row, PlayersSelector type) {
         pos = new Position(col, row);
         hasFlag = false;
+        this.type = type;
     }
 
     //walk method
@@ -64,5 +63,15 @@ public abstract class Player implements KeyboardHandler {
 
         hasFlag = false;
         pos.resetPos();
+    }
+
+    public PlayersSelector getType() {
+        return type;
+    }
+    public boolean equals (Player obj) {
+        if (this.getPos().getCol() == obj.getPos().getCol() && this.getPos().getRow() == obj.getPos().getRow()) {
+            return true;
+        }
+        return false;
     }
 }

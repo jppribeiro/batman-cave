@@ -1,8 +1,10 @@
 package org.academiadecodigo.batmancave;
 
+
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
+import org.academiadecodigo.batmancave.gameobjects.enemies.GhostSelector;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
 import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
@@ -10,9 +12,7 @@ import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 
 
-import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
 
 public class Game {
 
@@ -23,64 +23,57 @@ public class Game {
     private PlayerOne playerOne;
     private PlayerTwo playerTwo;
     private Player[] players;
-    private Ghost ghost;
+    private Ghost[] ghosts;
     private Flag flag;
     private boolean roundEnd;
     private int[] points;
-    private File mainTheme = new File("./resources/atTheEndOfAllThings.wav"); // path to your clip
-    private File escapeSong = new File("./resources/flee-flag.wav"); // path to your clip
+    private GameStage stage;
 
+    //Audio
+    private Sound sound = new Sound();
+    private File mainTheme = new File("./resources/startSong.wav");
+    private File boo = new File("./resources/GOTCHA_BITCH.wav");
+    private File escapeSong = new File("./resources/Danger.wav");
+    private File powerUp = new File("./resources/Power_1.wav");
+    private File hit = new File("./resources/moaning-woman_1.wav");
 
-
-    private AudioInputStream audioStrmObj;
-    private AudioFormat format;
-    private DataLine.Info info;
-    private Clip audioClip;
-
-
-
+    //Constructor
     public Game() {
         maze = new Maze(41, 31);
         mazeGfx = new MazeGfx(maze);
         points = new int[]{0,0};
+        stage = GameStage.SEARCHING;
+        ghosts = new Ghost[2];
     }
 
-
+    //Menu method
     public void menu(){
-
         try{
-            playThemeSong();
-        } catch (UnsupportedAudioFileException e1) {
-            System.out.println("NOT");
-        } catch (IOException e2) {
+            sound.play(mainTheme);
+            menu.keyboard();
+            menu.startMenu();
 
-        } catch (LineUnavailableException e3) {
-
-        }
-
-        menu.keyboard();
-        menu.gameOver();
-        menu.startMenu();
-
-        while (!menu.isGameStart()){
-            try {
+            while (!menu.isGameStart()){
                 Thread.sleep(500);
-            } catch (InterruptedException e ) {
             }
+            sound.stop();
+            sound.play(escapeSong);
+            init();
+        } catch (InterruptedException e5){
+            System.out.println("Interrupted Exception");
         }
-
-        init();
     }
 
+    //Init Method
     public void init() {
 
         maze.init();
 
         maze.generate();
 
-        mazeGfx.init();
 
-        flag = new Flag(21,15);
+
+        flag = new Flag();
 
         //flag.setMazeGfx(mazeGfx);
 
@@ -94,7 +87,7 @@ public class Game {
 
         players[1] = playerTwo;
 
-        ghost = new Ghost(31,15);
+        //ghost = new Ghost(1);
 
         movementDetector = new MovementDetector(maze, flag);
 
@@ -102,38 +95,75 @@ public class Game {
 
         playerOne.setMazeGfx(mazeGfx);
 
-        ghost.setMovementDetector(movementDetector);
-
-        ghost.setMazeGfx(mazeGfx);
-
         playerTwo.setMovementDetector(movementDetector);
 
         playerTwo.setMazeGfx(mazeGfx);
 
+        mazeGfx.setFlag(flag);
+
+        mazeGfx.init();
+
         mazeGfx.setPlayers(players);
 
         playerOne.walk();
-
         playerTwo.walk();
 
-        try{
+        try {
             start();
         } catch (InterruptedException e) {
-
+            System.out.println("Interrupted Exception");
         }
 
     }
 
     public void start() throws InterruptedException {
+
+        int powerUpCounter = 0;
+
         while (!roundEnd) {
-
-
-            Thread.sleep(50);
-            // Move Ghost
-            ghost.move();
+            Thread.sleep(200);
             // Make condition to win level and raise level
+            if(stage == GameStage.SEARCHING) {
+                if(playerOne.getHasFlag() || playerTwo.getHasFlag()) {
+                    stage = GameStage.RETRIEVING;
+                    ghosts[0] = new Ghost(1);
+                    ghosts[1] = new Ghost(2);
 
-            roundEnd = movementDetector.roundEnd(players);
+                    ghosts[0].setMazeGfx(mazeGfx);
+                    ghosts[0].setMovementDetector(movementDetector);
+
+                    ghosts[1].setMazeGfx(mazeGfx);
+                    ghosts[1].setMovementDetector(movementDetector);
+
+                    mazeGfx.drawGhost(ghosts);
+                }
+            } else if (stage == GameStage.RETRIEVING) {
+
+                if (powerUpCounter == 0) {
+                    sound.playSFX(powerUp);
+                    powerUpCounter++;
+                }
+
+                //System.out.println("RETRIEVING!");
+                ghosts[0].move(GhostSelector.ONE);
+                ghosts[1].move(GhostSelector.TWO);
+
+                Player dead = movementDetector.killedByGhost(ghosts, players);
+
+                if(dead != null) {
+                    if (dead.getHasFlag()) {
+                        sound.playSFX(boo);
+                        dead.reset();
+                        mazeGfx.playerCaught(dead.getType());
+                    }
+                }
+
+                roundEnd = movementDetector.roundEnd(players);
+            }
+
+            if(movementDetector.playersClash(players)) {
+                sound.playSFX(hit);
+            }
 
         }
 
@@ -143,60 +173,35 @@ public class Game {
             points[1]++;
         }
         menu.gameOver();
-        menu.startMenu();
-        restart();
+        //Text winner = new Text();
+        //restart();
+
     }
 
 
     private void restart() {
-        flag.resetFlag();
-        playerOne.reset();
-        playerTwo.reset();
-        //flag = new Flag(21, 15);
-        maze.init();
-        maze.generate();
-
-        mazeGfx.restartMazeGfx();
-
-        roundEnd = false;
-
-
         try{
+            sound.stop();
+            sound.play(escapeSong);
+
+            flag.resetFlag();
+            playerOne.reset();
+            playerTwo.reset();
+
+            maze.init();
+            maze.generate();
+            mazeGfx.restartMazeGfx();
+
+            roundEnd = false;
             start();
         } catch (InterruptedException e) {
-
+            System.out.println("Interrupted Exception");
         }
-
     }
 
-    private void playThemeSong() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        audioStrmObj = AudioSystem.getAudioInputStream(escapeSong);
-        format = audioStrmObj.getFormat();
-        DataLine.Info info = new DataLine.Info(Clip.class, format);
-        Clip audioClip = (Clip) AudioSystem.getLine(info);
-        audioClip.open(audioStrmObj);
-        audioClip.start();
-        audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+    private enum GameStage {
+        SEARCHING,
+        RETRIEVING
     }
-
-    private void stopThemeSong() {
-        audioClip.stop();
-    }
-
-    private void playEscapeSong() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        audioStrmObj = AudioSystem.getAudioInputStream(escapeSong);
-        format = audioStrmObj.getFormat();
-        DataLine.Info info = new DataLine.Info(Clip.class, format);
-        Clip audioClip = (Clip) AudioSystem.getLine(info);
-        audioClip.open(audioStrmObj);
-        audioClip.start();
-        audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-
-    private void stopEscapeSong() {
-        audioClip.stop();
-    }
-
-
 
 }
