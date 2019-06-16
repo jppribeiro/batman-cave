@@ -120,6 +120,8 @@ public class Game {
 
                 Player dead = movementDetector.killedByGhost(ghosts, players);
 
+                Thread.sleep(200);
+
                 if(dead != null) {
                     if (dead.getHasFlag()) {
                         soundBoo.playSFX(boo);
