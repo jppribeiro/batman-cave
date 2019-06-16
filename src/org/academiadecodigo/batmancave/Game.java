@@ -1,22 +1,15 @@
 package org.academiadecodigo.batmancave;
 
-import javafx.scene.text.Text;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
 import org.academiadecodigo.batmancave.gameobjects.enemies.GhostSelector;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
-import org.academiadecodigo.batmancave.maze.Excavator;
 import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
 import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
-import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.File;
 import java.net.URL;
 
 public class Game {
@@ -37,7 +30,6 @@ public class Game {
 
     //Audio
     private Sound sound = new Sound();
-
 
     private String mainTheme = "/resources/startSong.wav";
     private String boo = "/resources/gotcha.wav";
@@ -164,6 +156,7 @@ public class Game {
                         sound.playSound(boo);
                         dead.reset();
                         mazeGfx.playerCaught(dead.getType());
+                        mazeGfx.refreshMaze();
                     }
                 }
 
@@ -174,6 +167,8 @@ public class Game {
                 sound.playSound(hit);
             }
 
+
+
         }
 
         if (playerOne.getHasFlag()) {
@@ -182,12 +177,10 @@ public class Game {
             points[1]++;
         }
 
-        Text winner = new Text();
-
-
         //restart();
     }
 
+    /*
 
     /*
     private void restart() {
@@ -210,11 +203,13 @@ public class Game {
             System.out.println("Interrupted Exception");
         }
     }
+<<<<<<< HEAD
     */
 
     private enum GameStage {
         SEARCHING,
         RETRIEVING
     }
+
 
 }

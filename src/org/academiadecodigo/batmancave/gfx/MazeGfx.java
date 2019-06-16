@@ -271,4 +271,10 @@ public class MazeGfx {
     }
 
 
+    public void refreshMaze() {
+        drawMaze();
+        movePlayerTwo(0,0);
+        movePlayerOne(0,0);
+    }
+
 }
