@@ -104,6 +104,7 @@ public class Ghost extends Enemy {
                         break;
                 }
 
+                System.out.println("Ghost at: " + this.getPos().getCol() + ", " + this.getPos().getRow());
             }
     }
 

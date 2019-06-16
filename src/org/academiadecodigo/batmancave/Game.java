@@ -6,13 +6,18 @@ import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
 import org.academiadecodigo.batmancave.gameobjects.enemies.GhostSelector;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
+import org.academiadecodigo.batmancave.maze.Excavator;
 import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
 import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.io.File;
+import java.net.URL;
 
 public class Game {
 
@@ -32,11 +37,13 @@ public class Game {
 
     //Audio
     private Sound sound = new Sound();
-    private File mainTheme = new File("./resources/startSong.wav");
-    private File boo = new File("./resources/GOTCHA_BITCH.wav");
-    private File escapeSong = new File("./resources/Danger.wav");
-    private File powerUp = new File("./resources/Power_1.wav");
-    private File hit = new File("./resources/moaning-woman_1.wav");
+
+
+    private String mainTheme = "/resources/startSong.wav";
+    private String boo = "/resources/gotcha.wav";
+    private String escapeSong = "/resources/Danger.wav";
+    private String powerUp = "/resources/Power_1.wav";
+    private String hit = "/resources/moaning-woman_1.wav";
 
     //Constructor
     public Game() {
@@ -51,13 +58,13 @@ public class Game {
     public void menu(){
 
         try{
-            sound.play(mainTheme);
+            sound.playSound(mainTheme);
             menu = new Menu();
             while (!menu.isGameStart()){
                 Thread.sleep(500);
             }
             sound.stop();
-            sound.play(escapeSong);
+            sound.playSound(escapeSong);
             init();
         } catch (InterruptedException e5){
             System.out.println("Interrupted Exception");
@@ -66,6 +73,8 @@ public class Game {
 
     //Init Method
     public void init() {
+
+        //sound.playSound(escapeSong);
 
         maze.init();
 
@@ -140,7 +149,7 @@ public class Game {
             } else if (stage == GameStage.RETRIEVING) {
 
                 if (powerUpCounter == 0) {
-                    sound.playSFX(powerUp);
+                    sound.playSound(powerUp);
                     powerUpCounter++;
                 }
 
@@ -152,7 +161,7 @@ public class Game {
 
                 if(dead != null) {
                     if (dead.getHasFlag()) {
-                        sound.playSFX(boo);
+                        sound.playSound(boo);
                         dead.reset();
                         mazeGfx.playerCaught(dead.getType());
                     }
@@ -162,7 +171,7 @@ public class Game {
             }
 
             if(movementDetector.playersClash(players)) {
-                sound.playSFX(hit);
+                sound.playSound(hit);
             }
 
         }
@@ -180,6 +189,7 @@ public class Game {
     }
 
 
+    /*
     private void restart() {
 
         try{
@@ -200,6 +210,7 @@ public class Game {
             System.out.println("Interrupted Exception");
         }
     }
+    */
 
     private enum GameStage {
         SEARCHING,

@@ -3,14 +3,16 @@ package org.academiadecodigo.batmancave;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class Sound {
 
     //properties
     private AudioInputStream audioStrmObj;
-    private AudioFormat format;
+    //private AudioFormat format;
     private Clip audioClip;
 
+    /*
     //playThemeSound method
     public void play(File sound) {
 
@@ -48,6 +50,28 @@ public class Sound {
             System.out.println("Line Unavailable Exception");
         }
     }
+    */
+
+    public void playSound(String path) {
+        try {
+            URL themeSong = getClass().getResource(path);
+            audioStrmObj = AudioSystem.getAudioInputStream(themeSong);
+            audioClip = AudioSystem.getClip();
+            audioClip.open(audioStrmObj);
+            audioClip.start();
+            //audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException uns) {
+            System.out.println("Unsupported Audio Exception");
+        } catch (IOException io) {
+            System.out.println("Unsupported IO Exception");
+        } catch (LineUnavailableException line) {
+            System.out.println("Line Unavailable Exception");
+        }
+    }
+
+
+
+
 
     //stop
     public void stop () {
