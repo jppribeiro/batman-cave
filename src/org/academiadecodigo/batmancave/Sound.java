@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Sound {
-
     //properties
     private AudioInputStream audioStrmObj;
     private AudioFormat format;
@@ -50,7 +49,7 @@ public class Sound {
     }
 
     //stop
-    public void stop () {
+    public void stop() {
         audioClip.stop();
     }
 }

@@ -6,7 +6,6 @@ import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 import org.academiadecodigo.batmancave.gameobjects.Usables.Flag;
 
 public class MovementDetector {
-
     private Maze maze;
     private Flag flag;
 
@@ -16,21 +15,15 @@ public class MovementDetector {
     }
 
     public boolean checkMove(Directions direction, Player player) {
-
         int currentCol = player.getPos().getCol();
         int currentRow = player.getPos().getRow();
 
         return moveSwitch(direction, currentCol, currentRow);
-
     }
 
     public boolean checkFlag(Position pos) {
-
-        System.out.println("flag at: " + flag.getPos().getCol() + ", " + flag.getPos().getRow());
-        System.out.println("player at: " + pos.getCol() + ", " + pos.getRow());
-
-        //System.out.println("Flag at: " + flag.getPos().getCol() + ", " + flag.getPos().getRow());
-        //System.out.println("Player at: " + pos.getCol() + ", " + pos.getRow());
+        System.out.println("Flag at: " + flag.getPos().getCol() + ", " + flag.getPos().getRow());
+        System.out.println("Player at: " + pos.getCol() + ", " + pos.getRow());
 
         if(pos.getCol() == flag.getPos().getCol() && pos.getRow() == flag.getPos().getRow()) {
             flag.setPos(pos);
@@ -38,11 +31,9 @@ public class MovementDetector {
         } else {
             return false;
         }
-
     }
 
     public boolean roundEnd(Player[] players) {
-
         if(players[0].getHasFlag() &&
             players[0].getPos().getCol() == 1 &&
             players[0].getPos().getRow() == 1) {
@@ -58,20 +49,16 @@ public class MovementDetector {
         }
 
         return false;
-
     }
 
     public boolean checkMove(Directions direction, Ghost ghost) {
-
         int currentCol = ghost.getPos().getCol();
         int currentRow = ghost.getPos().getRow();
 
         return moveSwitch(direction, currentCol, currentRow);
-
     }
 
     private boolean moveSwitch(Directions direction, int currentCol, int currentRow) {
-
         switch (direction) {
             case UP:
                 if (maze.getLayout()[currentCol][currentRow - 1].getType() == CellType.ROOM) {
@@ -100,11 +87,9 @@ public class MovementDetector {
             default:
                 return false;
         }
-
     }
 
     public Player killedByGhost(Ghost[] ghosts, Player[] players) {
-
         for (Ghost ghost:
              ghosts) {
             for (Player player:
@@ -114,19 +99,14 @@ public class MovementDetector {
                     ghost.getPos().getRow() == player.getPos().getRow()) {
 
                     return player;
-
                 }
             }
         }
 
         return null;
-
     }
 
     public boolean playersClash(Player[] players) {
-
         return players[0].equals(players[1]);
-
     }
-
 }

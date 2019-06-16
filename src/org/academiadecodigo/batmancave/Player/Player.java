@@ -14,6 +14,7 @@ public abstract class Player implements KeyboardHandler {
     protected MovementDetector movementDetector;
     protected MazeGfx mazeGfx;
     private boolean hasFlag;
+    protected boolean gameStart;
     private PlayersSelector type;
 
     public Player(int col, int row, PlayersSelector type) {
@@ -38,6 +39,9 @@ public abstract class Player implements KeyboardHandler {
         }
     }
 
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
 
     public void setHasFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;

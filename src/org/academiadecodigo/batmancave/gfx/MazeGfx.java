@@ -49,7 +49,6 @@ public class MazeGfx {
             }
         }
 
-
         playerOne = new Picture( cellSize + PADDING, cellSize , "Player/player 1 30x30.png");
 
         playerTwo = new Picture( (mazeLayout.length-2) * cellSize + PADDING, (mazeLayout[0].length - 2) * cellSize, "Player/player 2 30x30.png");
@@ -58,12 +57,9 @@ public class MazeGfx {
         drawMaze();
         drawPlayer();
 
-
         //drawPlayer(0, cellSize);
         //drawGhost();
     }
-
-
 
     private Picture assignCell(int col, int row) {
 
@@ -101,9 +97,7 @@ public class MazeGfx {
 
     }
 
-
     private void drawMaze() {
-
         int distanceOne;
         int distanceTwo;
 
@@ -117,7 +111,6 @@ public class MazeGfx {
                 if(distanceOne < viewRadius || distanceTwo < viewRadius) {
                     mazeLayout[i][j].getCellGfx().draw();
                 } else {
-                    System.out.println("Error deleting :" + i + ", " + j);
                     mazeLayout[i][j].getCellGfx().delete();
                 }
 
@@ -144,27 +137,20 @@ public class MazeGfx {
     }
 
     private void drawPlayer() {
-
         playerOne.draw();
-
         playerTwo.draw();
-
     }
 
     public void drawGhost(Ghost[] ghosts) {
-
         ghost1 = new Picture(ghosts[0].getPos().getCol()*cellSize+PADDING, ghosts[0].getPos().getRow()*cellSize + PADDING, "ghost30.png");
-
         ghost2 = new Picture(ghosts[1].getPos().getCol()*cellSize+PADDING, ghosts[1].getPos().getRow()*cellSize+PADDING, "ghost30.png");
-
         hasGhosts = true;
-
     }
 
     public void movePlayerOne (int col, int row) {
-
         playerOne.translate((double)(col*cellSize),(double)(row * cellSize));
         playerOne.delete();
+
         if(players[0].getHasFlag()) {
             playerOne = new Picture(playerOne.getX(), playerOne.getY(), "Player/player 1 30x30 super.png" );
 
@@ -174,6 +160,7 @@ public class MazeGfx {
         } else {
             playerOne = new Picture(playerOne.getX(), playerOne.getY(), "Player/player 1 30x30.png" );
         }
+
         drawMaze();
         //drawFlag();
         playerOne.draw();
@@ -205,14 +192,11 @@ public class MazeGfx {
         } else {
             ghost2.translate((double) (col * cellSize), (double) (row * cellSize));
             //ghost2.delete();
-
         }
-
     }
 
 
     private int[] randomPos () {
-
         int col = (int)(Math.random()*(mazeLayout.length / 2) + mazeLayout.length / 2);
 
         int row = (int)(Math.random()*(mazeLayout[0].length / 2) + mazeLayout[0].length / 2);
@@ -242,20 +226,16 @@ public class MazeGfx {
         this.players = players;
     }
 
-    public void restartMazeGfx() {
+    public void deleteMazeGfx() {
         window.delete();
         playerOne.delete();
         playerTwo.delete();
 
         for (int i = 0; i < mazeLayout.length; i++) {
             for (int j = 0; j < mazeLayout[0].length; j++) {
-
                 mazeLayout[i][j].setCellGfx(null);
-
             }
         }
-
-        init();
     }
 
     public void setFlag(Flag flag) {

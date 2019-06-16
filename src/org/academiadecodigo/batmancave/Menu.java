@@ -10,14 +10,15 @@ public class Menu implements KeyboardHandler {
     private boolean gameStart;
     private boolean buttonPress;
     private boolean buttonPress1;
-    private boolean buttonReleased;
+    private boolean p1wins;
+    private boolean p2wins;
     private Picture bg = new Picture(10,10,"Menu/background.png");
     private Picture start = new Picture(483, 550, "Menu/buttons/Start.png");
     private Picture quit = new Picture(483, 650, "Menu/buttons/Quit.png");
-    private Picture button = new Picture(483, 550, "Menu/buttons/button.png");
-    private Picture button1 = new Picture(483, 650, "Menu/buttons/button.png");
-    private Picture buttonPressed = new Picture(483, 550, "Menu/buttons/button pressed.png");
-    private Picture buttonPressed1 = new Picture(483, 650, "Menu/buttons/button pressed.png");
+    private Picture button = new Picture(483, 550, "Menu/buttons/Button.png");
+    private Picture button1 = new Picture(483, 650, "Menu/buttons/Button.png");
+    private Picture buttonPressed = new Picture(483, 550, "Menu/buttons/Button pressed.png");
+    private Picture buttonPressed1 = new Picture(483, 650, "Menu/buttons/Button pressed.png");
     private Picture pressSpace = new Picture(539, 565, "Menu/buttons/Press space.png");
     private Picture pressEsc = new Picture(539, 665, "Menu/buttons/Press esc.png");
     private Picture title = new Picture(376, 180, "Menu/tittle.png");
@@ -25,9 +26,12 @@ public class Menu implements KeyboardHandler {
     private Picture gameOver = new Picture(381,300, "Menu/game_over.png");
     private Picture p1win = new Picture(475, 600,"Menu/p1w.png");
     private Picture p2win = new Picture(475, 600,"Menu/p2w.png");
-
+    private Picture bgBlack = new Picture(10, 10,"Menu/background_black.png");
 
     public void startMenu(){
+        bgBlack.delete();
+        bgBlack.draw();
+        bg1.delete();
         bg.draw();
         title.draw();
         button.draw();
@@ -45,19 +49,19 @@ public class Menu implements KeyboardHandler {
                 pressEsc.draw();
             }
             try {
-                Thread.sleep(400);
+                Thread.sleep(500);
             } catch (InterruptedException e ) {
             }
             if (!buttonPress) {
                 pressSpace.delete();
                 start.draw();
             }
-            if (!buttonPress1 && !buttonReleased) {
+            if (!buttonPress1) {
                 pressEsc.delete();
                 quit.draw();
             }
             try {
-                Thread.sleep(800);
+                Thread.sleep(1000);
             } catch (InterruptedException e ) {
             }
         }
@@ -65,13 +69,14 @@ public class Menu implements KeyboardHandler {
 
     public void gameOver() {
         bg1.draw();
-        p1win.draw();
-        /*if(p1wins == true){
+        if(p1wins){
             p1win.draw();
+            p1wins = false;
         }
-        if(p2wins == true){
-            p1win.draw();
-        }*/
+        if(p2wins){
+            p2win.draw();
+            p2wins = false;
+        }
         gameOver.draw();
         try {
             Thread.sleep(5000);
@@ -79,7 +84,6 @@ public class Menu implements KeyboardHandler {
         }
         gameOver.delete();
         p1win.delete();
-        bg1.delete();
     }
 
     public void keyboard(){
@@ -106,12 +110,16 @@ public class Menu implements KeyboardHandler {
         keyboard.addEventListener(quitGame);
     }
 
-    public boolean isGameStart() {
-        return gameStart;
-    }
-
     public void setGameStart() {
         gameStart = false;
+    }
+
+    public void setP1wins() {
+        p1wins = true;
+    }
+
+    public void setP2wins() {
+        p2wins = true;
     }
 
     @Override
@@ -141,9 +149,12 @@ public class Menu implements KeyboardHandler {
     public void keyReleased(KeyboardEvent e) {
         if (e.getKey() == KeyboardEvent.KEY_SPACE) {
             if (!gameStart) {
-                buttonPress = false;
                 gameStart = true;
-                buttonReleased = true;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                }
+                buttonPress = false;
                 title.delete();
                 pressEsc.delete();
                 button.delete();

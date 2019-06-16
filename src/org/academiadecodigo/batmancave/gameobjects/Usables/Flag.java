@@ -1,13 +1,8 @@
 package org.academiadecodigo.batmancave.gameobjects.Usables;
 
-
-import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Position;
-import org.academiadecodigo.batmancave.gfx.MazeGfx;
-import org.academiadecodigo.batmancave.maze.Maze;
 
 public class Flag {
-
     private Position pos;
     private Position startPos;
     private Position[] possiblePositions;
