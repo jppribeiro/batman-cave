@@ -50,9 +50,7 @@ public class PlayerTwo extends Player {
                 break;
             default:
                 break;
-
         }
-
     }
 
     private void move(Directions direction) {
@@ -64,7 +62,6 @@ public class PlayerTwo extends Player {
 
             movementController.signalMove();
         }
-
     }
 
     @Override
@@ -72,4 +69,11 @@ public class PlayerTwo extends Player {
         this.movementController = movementController;
     }
 
+    public void lookFurious() {
+        getPlayerGfx().load("resources/Player/player 2 30x30 super.png");
+    }
+
+    public void lookNormal() {
+        getPlayerGfx().load("resources/Player/player 2 30x30.png");
+    }
 }

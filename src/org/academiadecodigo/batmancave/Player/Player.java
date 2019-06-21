@@ -42,6 +42,12 @@ public abstract class Player {
 
     public void setRetrieving(boolean retrieving) {
         this.retrieving = retrieving;
+        if (retrieving) {
+            lookFurious();
+        } else {
+            lookNormal();
+        }
+
     }
 
     public boolean isRetrieving() {
@@ -93,6 +99,9 @@ public abstract class Player {
         return type;
     }
 
+    public abstract void lookFurious();
+
+    public abstract void lookNormal();
 
     public boolean equals (Player obj) {
         if (this.getPos().getCol() == obj.getPos().getCol() && this.getPos().getRow() == obj.getPos().getRow()) {
