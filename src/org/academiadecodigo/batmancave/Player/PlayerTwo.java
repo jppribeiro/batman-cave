@@ -1,86 +1,75 @@
 package org.academiadecodigo.batmancave.Player;
 
-import org.academiadecodigo.batmancave.PlayersSelector;
+import org.academiadecodigo.batmancave.MovementController;
+import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.maze.Directions;
+import org.academiadecodigo.batmancave.maze.MazeGFX;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-public class PlayerTwo extends Player implements KeyboardHandler {
+public class PlayerTwo extends Player {
+
+    private KeyboardController keyboardController;
+    private MovementController movementController;
 
     public PlayerTwo(int col, int row) {
-        super(col, row, PlayersSelector.TWO);
+        super(col, row, Players.TWO);
+        super.setPlayerGfx(new Picture(col * MazeGFX.CELLSIZE + MazeGFX.PADDING, row * MazeGFX.CELLSIZE + 8, "resources/Player/player 2 30x30.png"));
+        keyboardController = new KeyboardController(this);
+        setupKeys();
     }
 
-    @Override
-    public void walk() {
-
-        Keyboard keyboard = new Keyboard(this);
-
-        // setup events
-        KeyboardEvent up = new KeyboardEvent();
-        KeyboardEvent right = new KeyboardEvent();
-        KeyboardEvent down = new KeyboardEvent();
-        KeyboardEvent left = new KeyboardEvent();
-
-        // assign event key
-        up.setKey(KeyboardEvent.KEY_UP);
-        right.setKey(KeyboardEvent.KEY_RIGHT);
-        down.setKey(KeyboardEvent.KEY_DOWN);
-        left.setKey(KeyboardEvent.KEY_LEFT);
-
-        // set event type
-        up.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        right.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        down.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        left.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-
-        // add event listeners
-        keyboard.addEventListener(up);
-        keyboard.addEventListener(right);
-        keyboard.addEventListener(down);
-        keyboard.addEventListener(left);
-
+    private void setupKeys() {
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_W);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_D);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_S);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_A);
     }
 
-    @Override
-    public void keyPressed(KeyboardEvent keyboardEvent) {
-
-        int key = keyboardEvent.getKey();
+    public void keyAction(int key) {
 
         switch (key) {
             case KeyboardEvent.KEY_UP:
-                if (movementDetector.checkMove(Directions.UP, this)) {
-                    pos.changePosition(0, -1);
-                    mazeGfx.movePlayerTwo(0, -1);
-                }
+                // TODO MOVE UP
+                move(Directions.UP);
                 break;
             case KeyboardEvent.KEY_RIGHT:
-                if (movementDetector.checkMove(Directions.RIGHT, this)) {
-                    pos.changePosition(1, 0);
-                    mazeGfx.movePlayerTwo(1, 0);
-                }
+                // TODO MOVE RIGHT
+                move(Directions.RIGHT);
                 break;
             case KeyboardEvent.KEY_DOWN:
-                if (movementDetector.checkMove(Directions.DOWN, this)) {
-                    pos.changePosition(0, 1);
-                    mazeGfx.movePlayerTwo(0, 1);
-                    // MOVE DOWN
-                }
+                // TODO MOVE DOWN
+                move(Directions.DOWN);
                 break;
             case KeyboardEvent.KEY_LEFT:
-                if (movementDetector.checkMove(Directions.LEFT, this)) {
-                    pos.changePosition(-1, 0);
-                    mazeGfx.movePlayerTwo(-1, 0);
-                    // MOVE LEFT
-                }
+                // TODO MOVE LEFT
+                move(Directions.LEFT);
                 break;
             default:
                 break;
+
         }
 
-        super.setHasFlag(movementDetector.checkFlag(pos));
-        //System.out.println(super.getHasFlag());
     }
+
+    private void move(Directions direction) {
+
+        if (movementController.checkMove(pos, direction)) {
+
+            pos.changePosition(direction.getMoveCol(), direction.getMoveRow());
+            getPlayerGfx().translate(direction.getMoveCol() * MazeGFX.CELLSIZE, direction.getMoveRow() * MazeGFX.CELLSIZE);
+
+            movementController.signalMove();
+        }
+
+    }
+
+    @Override
+    public void setMovementController(MovementController movementController) {
+        this.movementController = movementController;
+    }
+
 }

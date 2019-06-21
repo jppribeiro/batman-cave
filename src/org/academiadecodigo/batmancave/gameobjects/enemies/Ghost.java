@@ -3,14 +3,15 @@ package org.academiadecodigo.batmancave.gameobjects.enemies;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
+import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.Position;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
 import org.academiadecodigo.batmancave.maze.*;
 
 import java.util.Random;
 
-public class Ghost extends Enemy {
-
+public class Ghost {
+/*
     //properties
     protected Position pos;
     private MovementDetector movementDetector;
@@ -21,15 +22,15 @@ public class Ghost extends Enemy {
 
 
 
-    public Ghost(int player) {
+    public Ghost(Players player) {
         initGhostForPlayer(player);
     }
 
-    public void initGhostForPlayer(int player) {
+    public void initGhostForPlayer(Players player) {
 
         int quadrant = 0;
 
-        if( player == 2) {
+        if( player == Players.TWO) {
             quadrant = 1;
         }
 
@@ -117,7 +118,7 @@ public class Ghost extends Enemy {
 
         System.out.println(col + ", " + row);
 
-        if(col%2 != 0 && col%2 != 0) {
+        if(col%2 != 0 && row%2 != 0) {
             return pos;
         } else {
             return randomPos(quadrant);
@@ -132,16 +133,13 @@ public class Ghost extends Enemy {
         this.movementDetector = movementDetector;
     }
 
-    //hit method
-    @Override
-    public void hit (Player player) {
-        //player.die();
-        getMessage();
-    }
+
 
     //getMessage method
-    @Override
+
     public void getMessage() {
         System.out.println("*UUUUUUUUUUUHH*");
     }
+
+ */
 }

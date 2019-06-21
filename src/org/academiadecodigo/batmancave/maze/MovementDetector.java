@@ -6,7 +6,7 @@ import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 import org.academiadecodigo.batmancave.gameobjects.Usables.Flag;
 
 public class MovementDetector {
-
+/*
     private Maze maze;
     private Flag flag;
 
@@ -128,5 +128,5 @@ public class MovementDetector {
         return players[0].equals(players[1]);
 
     }
-
+*/
 }

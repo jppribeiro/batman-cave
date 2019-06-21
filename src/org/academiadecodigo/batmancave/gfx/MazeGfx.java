@@ -1,7 +1,7 @@
 package org.academiadecodigo.batmancave.gfx;
 
 import org.academiadecodigo.batmancave.Player.Player;
-import org.academiadecodigo.batmancave.PlayersSelector;
+import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.Position;
 import org.academiadecodigo.batmancave.gameobjects.Usables.Flag;
 import org.academiadecodigo.batmancave.gameobjects.enemies.GhostSelector;
@@ -12,7 +12,7 @@ import org.academiadecodigo.batmancave.maze.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 
 public class MazeGfx {
-
+/*
     private Rectangle window;
     private Cell[][] mazeLayout;
     private final int PADDING = 10;
@@ -117,7 +117,6 @@ public class MazeGfx {
                 if(distanceOne < viewRadius || distanceTwo < viewRadius) {
                     mazeLayout[i][j].getCellGfx().draw();
                 } else {
-                    System.out.println("Error deleting :" + i + ", " + j);
                     mazeLayout[i][j].getCellGfx().delete();
                 }
 
@@ -230,8 +229,8 @@ public class MazeGfx {
         }
     }
 
-    public void playerCaught(PlayersSelector playersSelector) {
-        if (playersSelector == PlayersSelector.ONE) {
+    public void playerCaught(Players playersSelector) {
+        if (playersSelector == Players.ONE) {
             playerOne.delete();
             playerOne = new Picture( cellSize + PADDING, cellSize , "resources/Player/player 1 30x30.png");
         } else {
@@ -276,5 +275,7 @@ public class MazeGfx {
         movePlayerTwo(0,0);
         movePlayerOne(0,0);
     }
+
+ */
 
 }

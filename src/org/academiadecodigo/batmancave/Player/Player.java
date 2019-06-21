@@ -1,63 +1,71 @@
 package org.academiadecodigo.batmancave.Player;
 
-import org.academiadecodigo.batmancave.PlayersSelector;
+import org.academiadecodigo.batmancave.MovementController;
+import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.Position;
 import org.academiadecodigo.batmancave.gfx.MazeGfx;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
+import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-public abstract class Player implements KeyboardHandler {
+public abstract class Player {
 
     //properties
     protected Position pos;
-    protected MovementDetector movementDetector;
-    protected MazeGfx mazeGfx;
     private boolean hasFlag;
-    private PlayersSelector type;
+    private Players type;
+    private Picture playerGfx;
+    private int viewRadius;
 
-    public Player(int col, int row, PlayersSelector type) {
+
+    public Player(int col, int row, Players type) {
         pos = new Position(col, row);
         hasFlag = false;
         this.type = type;
+        viewRadius = 5;
+
     }
 
     //walk method
-    public abstract void walk();
+    public abstract void keyAction(int key);
 
-    @Override
-    public abstract void keyPressed(KeyboardEvent keyboardEvent);
-
-    @Override
-    public void keyReleased(KeyboardEvent keyboardEvent) {
-
-        int key = keyboardEvent.getKey();
-
-        switch (key) {
-
-        }
+    public void draw() {
+        playerGfx.draw();
     }
 
+    public void hide() {
+        playerGfx.delete();
+    }
 
-    public void setHasFlag(boolean hasFlag) {
-        this.hasFlag = hasFlag;
+    public int getViewRadius() {
+        return viewRadius;
+    }
+
+    public Picture getPlayerGfx() {
+        return playerGfx;
     }
 
     public boolean getHasFlag() {
         return hasFlag;
     }
 
-    public void setMovementDetector(MovementDetector movementDetector) {
-        this.movementDetector = movementDetector;
-    }
-
-    public void setMazeGfx (MazeGfx mazeGfx) {
-        this.mazeGfx = mazeGfx;
-    }
-
     public Position getPos() {
         return pos;
     }
+
+    public void setPlayerGfx(Picture playerGfx) {
+        this.playerGfx = playerGfx;
+    }
+
+    public void setHasFlag(boolean hasFlag) {
+        this.hasFlag = hasFlag;
+    }
+
+    public abstract void setMovementController(MovementController movementController);
+
+
 
     public void reset() {
 
@@ -65,9 +73,11 @@ public abstract class Player implements KeyboardHandler {
         pos.resetPos();
     }
 
-    public PlayersSelector getType() {
+    public Players getType() {
         return type;
     }
+
+
     public boolean equals (Player obj) {
         if (this.getPos().getCol() == obj.getPos().getCol() && this.getPos().getRow() == obj.getPos().getRow()) {
             return true;

@@ -3,17 +3,12 @@ package org.academiadecodigo.batmancave;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
-import org.academiadecodigo.batmancave.gameobjects.enemies.GhostSelector;
-import org.academiadecodigo.batmancave.gfx.MazeGfx;
 import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
 import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 
-import javax.sound.sampled.AudioInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class Game {
@@ -21,10 +16,7 @@ public class Game {
     //Game
     private Menu menu;
     private Maze maze;
-    private MazeGfx mazeGfx;
-    private MovementDetector movementDetector;
-    private PlayerOne playerOne;
-    private PlayerTwo playerTwo;
+    private MovementController movementController;
     private Player[] players;
     private Ghost[] ghosts;
     private Flag flag;
@@ -47,170 +39,49 @@ public class Game {
 
     //Constructor
     public Game() {
-        maze = new Maze(41, 31);
-        mazeGfx = new MazeGfx(maze);
+
         points = new int[]{0,0};
-        stage = GameStage.SEARCHING;
+
+        maze = new Maze(41, 31);
+
+        players = new Player[] {new PlayerOne(1,1), new PlayerTwo(39,29)};
+
         ghosts = new Ghost[2];
+
+        movementController = new MovementController(maze, players, ghosts);
+
     }
 
-    //Menu method
-    /*
-    public void menu(){
 
-        try{
-            sound.play(mainTheme);
-            menu = new Menu();
-            while (!menu.isGameStart()){
-                Thread.sleep(500);
-            }
-            sound.stop();
-            sound.play(escapeSong);
-            init();
-        } catch (InterruptedException e5){
-            System.out.println("Interrupted Exception");
-        }
-    }
-     */
 
     //Init Method
     public void init() {
 
-        maze.init();
+        stage = GameStage.SEARCHING;
 
+        maze.init();
         maze.generate();
 
+        players[0].setMovementController(movementController);
+        players[1].setMovementController(movementController);
+
+        maze.draw(players);
+
+        players[0].draw();
+        players[1].draw();
 
 
-        flag = new Flag();
 
-        //flag.setMazeGfx(mazeGfx);
+        start();
+    }
 
-        playerOne = new PlayerOne(1,1);
+    public void start() {
 
-        playerTwo = new PlayerTwo(maze.getLayout().length-2, maze.getLayout()[0].length-2);
 
-        players = new Player[2];
-
-        players[0] = playerOne;
-
-        players[1] = playerTwo;
-
-        //ghost = new Ghost(1);
-
-        movementDetector = new MovementDetector(maze, flag);
-
-        playerOne.setMovementDetector(movementDetector);
-
-        playerOne.setMazeGfx(mazeGfx);
-
-        playerTwo.setMovementDetector(movementDetector);
-
-        playerTwo.setMazeGfx(mazeGfx);
-
-        mazeGfx.setFlag(flag);
-
-        mazeGfx.init();
-
-        mazeGfx.setPlayers(players);
-
-        playerOne.walk();
-        playerTwo.walk();
-
-        try {
-            start();
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted Exception");
-        }
 
     }
 
-    public void start() throws InterruptedException {
 
-        int powerUpCounter = 0;
-
-        while (!roundEnd) {
-            Thread.sleep(200);
-            // Make condition to win level and raise level
-            if(stage == GameStage.SEARCHING) {
-                if(playerOne.getHasFlag() || playerTwo.getHasFlag()) {
-                    stage = GameStage.RETRIEVING;
-                    ghosts[0] = new Ghost(1);
-                    ghosts[1] = new Ghost(2);
-
-                    ghosts[0].setMazeGfx(mazeGfx);
-                    ghosts[0].setMovementDetector(movementDetector);
-
-                    ghosts[1].setMazeGfx(mazeGfx);
-                    ghosts[1].setMovementDetector(movementDetector);
-
-                    mazeGfx.drawGhost(ghosts);
-                }
-            } else if (stage == GameStage.RETRIEVING) {
-
-                if (powerUpCounter == 0) {
-                    sound.playSFX(powerUp);
-                    powerUpCounter++;
-                }
-
-                //System.out.println("RETRIEVING!");
-                ghosts[0].move(GhostSelector.ONE);
-                ghosts[1].move(GhostSelector.TWO);
-
-                Player dead = movementDetector.killedByGhost(ghosts, players);
-
-                if(dead != null) {
-                    if (dead.getHasFlag()) {
-                        sound.playSFX(boo);
-                        dead.reset();
-                        mazeGfx.playerCaught(dead.getType());
-                        mazeGfx.refreshMaze();
-                    }
-                }
-
-                roundEnd = movementDetector.roundEnd(players);
-            }
-
-            if(movementDetector.playersClash(players)) {
-                sound.playSFX(hit);
-            }
-
-
-
-        }
-
-        if (playerOne.getHasFlag()) {
-            points[0]++;
-        } else {
-            points[1]++;
-        }
-
-        //restart();
-    }
-
-    /*
-
-    private void restart() {
-
-        try{
-            sound.stop();
-            sound.play(escapeSong);
-
-            flag.resetFlag();
-            playerOne.reset();
-            playerTwo.reset();
-
-            maze.init();
-            maze.generate();
-            mazeGfx.restartMazeGfx();
-
-            roundEnd = false;
-            start();
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted Exception");
-        }
-    }
-*/
     private enum GameStage {
         SEARCHING,
         RETRIEVING

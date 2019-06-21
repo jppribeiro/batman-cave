@@ -1,14 +1,17 @@
 package org.academiadecodigo.batmancave.maze;
 
+import org.academiadecodigo.batmancave.Player.Player;
+
 public class Maze {
 
     private Cell[][] layout;
-
     private Excavator excavator;
+    private MazeGFX mazeGFX;
 
     public Maze(int cols, int rows) {
         layout = new Cell[cols][rows];
         excavator = new Excavator(layout);
+        mazeGFX = new MazeGFX();
     }
 
     public void init() {
@@ -18,37 +21,21 @@ public class Maze {
         for(int i = 0; i < layout.length; i++) {
 
             for(int j = 0; j < layout[i].length; j++) {
-
                if(i == 0 || i == layout.length - 1) {
-
                    // EDGES OF MAZE ARE WALLS
-
                    layout[i][j] = new Cell(CellType.WALL);
-
                } else if(i % 2 == 0) {
-
                    // EVEN COLUMNS ARE WALLS
-
                    layout[i][j] = new Cell(CellType.WALL);
-
                } else if(j == 0 || j == layout[i].length) {
-
                     // EDGES ARE WALLS
-
                    layout[i][j] = new Cell(CellType.WALL);
-
                } else if(j % 2 == 0) {
-
                    // EVEN ROWS ARE WALLS
-
                    layout[i][j] = new Cell(CellType.WALL);
-
                } else {
-
                    // ALL ELSE IS A ROOM
-
                    layout[i][j] = new Cell(CellType.ROOM);
-
                }
             }
         }
@@ -58,7 +45,8 @@ public class Maze {
     public void generate() {
 
         int[] start = {1,1};
-        int[] nextMove = new int[2];
+        int[] nextMove;
+
         excavator.getStack().empty();
         excavator.getStack().push(start);
 
@@ -79,41 +67,36 @@ public class Maze {
             if (excavator.getNumSteps() > 2000) {
                 break;
             }
-
         }
 
+        mazeGFX.placePictures(layout);
+        mazeGFX.init(layout.length, layout[0].length);
     }
 
 
+    public void draw(Player[] players) {
+        mazeGFX.draw(layout, players);
+    }
+
+
+
+
     // FOR TESTING!!!!!!
+    // Prints Maze Layout to the Console
     public void printMaze() {
-
         int maxX = layout.length;
-
         int maxY = layout[0].length;
-
         for (int j = 0; j < maxY; j++) {
-
             String line = "";
-
             for (int i = 0; i < maxX; i++) {
-
                 if(layout[i][j].getType() == CellType.WALL) {
-
                     line += "█";
-
                 } else {
-
                     line += " ";
-
                 }
-
             }
-
             System.out.println(line);
-
         }
-
     }
 
     public Cell[][] getLayout() {
