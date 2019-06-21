@@ -18,6 +18,7 @@ public abstract class Player {
     private Players type;
     private Picture playerGfx;
     private int viewRadius;
+    private boolean retrieving; // If player has found the crystal it is in a retrieving mode back to base
 
 
     public Player(int col, int row, Players type) {
@@ -25,7 +26,7 @@ public abstract class Player {
         hasFlag = false;
         this.type = type;
         viewRadius = 5;
-
+        retrieving = false;
     }
 
     //walk method
@@ -37,6 +38,14 @@ public abstract class Player {
 
     public void hide() {
         playerGfx.delete();
+    }
+
+    public void setRetrieving(boolean retrieving) {
+        this.retrieving = retrieving;
+    }
+
+    public boolean isRetrieving() {
+        return retrieving;
     }
 
     public int getViewRadius() {
@@ -65,7 +74,14 @@ public abstract class Player {
 
     public abstract void setMovementController(MovementController movementController);
 
+    public boolean checkVisibility(Position pos) {
 
+        int distance;
+
+        distance = (int) (Math.sqrt((this.pos.getCol() - pos.getCol()) * (this.pos.getCol() - pos.getCol()) + (this.getPos().getRow() - pos.getRow()) * (this.getPos().getRow() - pos.getRow())));
+
+        return (distance < viewRadius);
+    }
 
     public void reset() {
 

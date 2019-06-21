@@ -3,6 +3,7 @@ package org.academiadecodigo.batmancave;
 import org.academiadecodigo.batmancave.Player.Player;
 import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
+import org.academiadecodigo.batmancave.gameobjects.Crystal;
 import org.academiadecodigo.batmancave.maze.Maze;
 import org.academiadecodigo.batmancave.maze.MovementDetector;
 import org.academiadecodigo.batmancave.gameobjects.Usables.*;
@@ -16,6 +17,7 @@ public class Game {
     //Game
     private Menu menu;
     private Maze maze;
+    private Crystal crystal;
     private MovementController movementController;
     private Player[] players;
     private Ghost[] ghosts;
@@ -44,11 +46,13 @@ public class Game {
 
         maze = new Maze(41, 31);
 
+        crystal = new Crystal();
+
         players = new Player[] {new PlayerOne(1,1), new PlayerTwo(39,29)};
 
         ghosts = new Ghost[2];
 
-        movementController = new MovementController(maze, players, ghosts);
+        movementController = new MovementController(maze, crystal, players, ghosts);
 
     }
 
@@ -62,8 +66,12 @@ public class Game {
         maze.init();
         maze.generate();
 
+
+
         players[0].setMovementController(movementController);
         players[1].setMovementController(movementController);
+
+        maze.setMovementController(movementController);
 
         maze.draw(players);
 

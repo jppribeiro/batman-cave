@@ -58,23 +58,18 @@ public class MazeGFX {
 
     public void draw(Cell[][] layout, Player[] players) {
 
-        int distanceOne;
-        int distanceTwo;
-
-        Position playerOnePos = players[0].getPos();
-        Position playerTwoPos = players[1].getPos();
-
         for (int i = 0; i < layout.length; i++) {
             for (int j = 0; j < layout[0].length; j++) {
 
-                distanceOne = (int) (Math.sqrt((playerOnePos.getCol() - i) * (playerOnePos.getCol() - i) + (playerOnePos.getRow() - j) * (playerOnePos.getRow() - j)));
+                if (players[0].checkVisibility(layout[i][j].getPosition()) ||
+                    players[1].checkVisibility(layout[i][j].getPosition())) {
 
-                distanceTwo = (int) (Math.sqrt((playerTwoPos.getCol() - i) * (playerTwoPos.getCol() - i) + (playerTwoPos.getRow() - j) * (playerTwoPos.getRow() - j)));
-
-                if (distanceOne < players[0].getViewRadius() || distanceTwo < players[1].getViewRadius()) {
                     layout[i][j].getCellGfx().draw();
+
                 } else {
+
                     layout[i][j].getCellGfx().delete();
+
                 }
             }
         }

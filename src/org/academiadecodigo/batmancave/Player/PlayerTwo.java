@@ -23,10 +23,10 @@ public class PlayerTwo extends Player {
     }
 
     private void setupKeys() {
-        keyboardController.addEventPressKey(KeyboardEvent.KEY_W);
-        keyboardController.addEventPressKey(KeyboardEvent.KEY_D);
-        keyboardController.addEventPressKey(KeyboardEvent.KEY_S);
-        keyboardController.addEventPressKey(KeyboardEvent.KEY_A);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_UP);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_RIGHT);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_DOWN);
+        keyboardController.addEventPressKey(KeyboardEvent.KEY_LEFT);
     }
 
     public void keyAction(int key) {

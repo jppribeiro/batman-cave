@@ -33,4 +33,8 @@ public class Position {
         col = startCol;
         row = startRow;
     }
+
+    public boolean equals(Position pos) {
+        return (col == pos.getCol() && row == pos.getRow());
+    }
 }
