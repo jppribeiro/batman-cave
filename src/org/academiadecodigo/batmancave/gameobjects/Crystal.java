@@ -21,9 +21,9 @@ public class Crystal {
     }
 
     private Position randomPosition() {
-        possiblePos[0] = new Position(1,29);
-        possiblePos[1] = new Position(21,15);
-        possiblePos[2] = new Position(39, 1);
+        possiblePos[0] = new Position(1,3);  //1,29
+        possiblePos[1] = new Position(3,1); //21,15
+        possiblePos[2] = new Position(1, 3); //39,1
 
         int selectPos = (int)(Math.random() * possiblePos.length);
 
@@ -49,5 +49,13 @@ public class Crystal {
 
     public void setFound(boolean found) {
         this.found = found;
+    }
+
+    public boolean isFound() {
+        return found;
+    }
+
+    public void restore() {
+        found = false;
     }
 }

@@ -64,7 +64,14 @@ public class MazeGFX {
                 if (players[0].checkVisibility(layout[i][j].getPosition()) ||
                     players[1].checkVisibility(layout[i][j].getPosition())) {
 
-                    layout[i][j].getCellGfx().draw();
+                    try {
+                        layout[i][j].getCellGfx().draw();
+                    }
+                    catch (Exception ex) {
+                        System.out.println(ex);
+                        System.out.println("Error: " + i + ", " + j);
+                    }
+
 
                 } else {
 

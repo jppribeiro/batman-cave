@@ -1,5 +1,6 @@
 package org.academiadecodigo.batmancave.Player;
 
+import org.academiadecodigo.batmancave.GameEntities;
 import org.academiadecodigo.batmancave.MovementController;
 import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.maze.Directions;
@@ -60,7 +61,7 @@ public class PlayerTwo extends Player {
             pos.changePosition(direction.getMoveCol(), direction.getMoveRow());
             getPlayerGfx().translate(direction.getMoveCol() * MazeGFX.CELLSIZE, direction.getMoveRow() * MazeGFX.CELLSIZE);
 
-            movementController.signalMove();
+            movementController.signalMove(GameEntities.PLAYER);
         }
     }
 
@@ -69,11 +70,22 @@ public class PlayerTwo extends Player {
         this.movementController = movementController;
     }
 
-    public void lookFurious() {
-        getPlayerGfx().load("resources/Player/player 2 30x30 super.png");
+
+    public void caughtCrystal() {
+        setRetrieving(true);
+        lookFurious();
     }
 
-    public void lookNormal() {
-        getPlayerGfx().load("resources/Player/player 2 30x30.png");
+    public void lostCrystal() {
+        setRetrieving(false);
+        lookNormal();
+    }
+
+    private void lookFurious() {
+        getPlayerGfx().load("resources/Player/player 1 30x30 super.png");
+    }
+
+    private void lookNormal() {
+        getPlayerGfx().load("resources/Player/player 1 30x30.png");
     }
 }

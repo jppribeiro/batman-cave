@@ -25,7 +25,7 @@ public abstract class Player {
         pos = new Position(col, row);
         hasFlag = false;
         this.type = type;
-        viewRadius = 5;
+        viewRadius = 8;
         retrieving = false;
     }
 
@@ -42,12 +42,6 @@ public abstract class Player {
 
     public void setRetrieving(boolean retrieving) {
         this.retrieving = retrieving;
-        if (retrieving) {
-            lookFurious();
-        } else {
-            lookNormal();
-        }
-
     }
 
     public boolean isRetrieving() {
@@ -98,10 +92,6 @@ public abstract class Player {
     public Players getType() {
         return type;
     }
-
-    public abstract void lookFurious();
-
-    public abstract void lookNormal();
 
     public boolean equals (Player obj) {
         if (this.getPos().getCol() == obj.getPos().getCol() && this.getPos().getRow() == obj.getPos().getRow()) {

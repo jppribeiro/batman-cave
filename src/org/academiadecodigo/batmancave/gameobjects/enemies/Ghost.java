@@ -1,32 +1,36 @@
 package org.academiadecodigo.batmancave.gameobjects.enemies;
 
+import org.academiadecodigo.batmancave.GameEntities;
+import org.academiadecodigo.batmancave.MovementController;
 import org.academiadecodigo.batmancave.Player.Player;
-import org.academiadecodigo.batmancave.Player.PlayerOne;
-import org.academiadecodigo.batmancave.Player.PlayerTwo;
 import org.academiadecodigo.batmancave.Players;
 import org.academiadecodigo.batmancave.Position;
-import org.academiadecodigo.batmancave.gfx.MazeGfx;
 import org.academiadecodigo.batmancave.maze.*;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-import java.util.Random;
 
-public class Ghost {
-/*
+public class Ghost extends Thread{
+
+    // TODO rewrite all this!
+
     //properties
-    protected Position pos;
-    private MovementDetector movementDetector;
-    private MazeGfx mazeGfx;
+    private Position pos;
+    private MovementController movementController;
     private Directions currentDirection;
+    private Picture ghostGfx;
+    private boolean[] moveVerifier;
 
-    private boolean playerDetected = false;     //irá no move verificar se tem algum player na range - se tiver, o estado de move altera
+    //private boolean playerDetected = false;     //irá no move verificar se tem algum player na range - se tiver, o estado de move altera
 
 
 
     public Ghost(Players player) {
         initGhostForPlayer(player);
+        ghostGfx = new Picture(pos.getCol() * MazeGFX.CELLSIZE + MazeGFX.PADDING, pos.getRow() * MazeGFX.CELLSIZE + 8, "resources/ghost30.png");
+        moveVerifier = new boolean[]{false,false,false,false};
     }
 
-    public void initGhostForPlayer(Players player) {
+    private void initGhostForPlayer(Players player) {
 
         int quadrant = 0;
 
@@ -45,67 +49,65 @@ public class Ghost {
     }
 
 
+    public void run() {
+
+        while (true) {
+
+            try {
+                Thread.sleep(250);
+                motionControl();
+            } catch (InterruptedException iEx) {
+                System.out.println("Interrupted Exception.");
+            }
+
+        }
+
+    }
+
 
     //move method
-    public void move(GhostSelector ghostSelector){
-            boolean[] moveVerifier = {false, false, false, false};  //0 - UP, 1 - RIGHT, 2 - LEFT, 3 - DOWN
-            if(playerDetected == false){                                   //Se o player não estiver detetado, continuará randomly. No fim do move, irá ver se o Player está no range e alterar ou não o boolean
-                //movementDetector.checkMove(Directions.UP, this) //checkmove: vê a posição atual(row,col)
-                //pos.changePosition(); //Para mudar a posição atual
+    public void motionControl(){
 
-                moveVerifier[0] = movementDetector.checkMove(Directions.UP,this);
-                moveVerifier[1] = movementDetector.checkMove(Directions.RIGHT, this);
-                moveVerifier[3] = movementDetector.checkMove(Directions.LEFT,this);
-                moveVerifier[2] = movementDetector.checkMove(Directions.DOWN, this);
+        System.out.println(moveVerifier[2]);
 
-                int countPossibleMoves = 0;
+        moveVerifier[0] = movementController.checkMove(pos, Directions.UP);
+        moveVerifier[1] = movementController.checkMove(pos, Directions.RIGHT);
+        moveVerifier[3] = movementController.checkMove(pos, Directions.LEFT);
+        moveVerifier[2] = movementController.checkMove(pos, Directions.DOWN);
 
-                for (boolean dir:
-                     moveVerifier) {
-                    if(dir) {
-                        countPossibleMoves++;
-                    }
-                }
+        System.out.println(moveVerifier[2]);
 
-                Directions move;
+        int countPossibleMoves = 0;
 
-                if (movementDetector.checkMove(currentDirection, this)) {
-
-                    if(countPossibleMoves > 2) {
-                        moveVerifier[currentDirection.getOppositeDirection()] = false;  // If there are more than 2 moves can't got backwards.
-                        move = RandomRoom.randomRoom(moveVerifier);                     // Chose random move except back
-                        currentDirection = move;                                        // set new current direction
-                    } else {
-                        move = currentDirection;                                        // keep current direction
-                    }
-
-                } else {
-                    move = RandomRoom.randomRoom(moveVerifier);
-                    currentDirection = move;
-                }
-
-                switch(move){
-                    case UP:
-                        pos.changePosition(0,-1);
-                        mazeGfx.moveGhost(0, -1, ghostSelector);
-                        break;
-                    case RIGHT:
-                        pos.changePosition(1,0);
-                        mazeGfx.moveGhost(1,0, ghostSelector);
-                        break;
-                    case LEFT:
-                        pos.changePosition(-1,0);
-                        mazeGfx.moveGhost(-1,0, ghostSelector);
-                        break;
-                    case DOWN:
-                        pos.changePosition(0,1);
-                        mazeGfx.moveGhost(0,1, ghostSelector);
-                        break;
-                    default:
-                        break;
-                }
-
+        for (boolean dir:
+             moveVerifier) {
+            if(dir) {
+                countPossibleMoves++;
             }
+        }
+
+        Directions nextMove;
+
+        if (movementController.checkMove(pos, currentDirection)) {
+
+            if(countPossibleMoves > 2) {
+                moveVerifier[currentDirection.getOppositeDirection()] = false;  // If there are more than 2 moves can't got backwards.
+                nextMove = RandomRoom.randomRoom(moveVerifier);                     // Chose random move except back
+                currentDirection = nextMove;                                        // set new current direction
+            } else {
+                nextMove = currentDirection;                                        // keep current direction
+            }
+
+        } else {
+            nextMove = RandomRoom.randomRoom(moveVerifier);
+            currentDirection = nextMove;
+        }
+
+        pos.changePosition(nextMove.getMoveCol(), nextMove.getMoveRow());
+        ghostGfx.translate(nextMove.getMoveCol() * MazeGFX.CELLSIZE, nextMove.getMoveRow() * MazeGFX.CELLSIZE);
+
+        movementController.signalMove(GameEntities.GHOST);
+
     }
 
     private int[] randomPos (int quadrant) {
@@ -125,21 +127,33 @@ public class Ghost {
         }
     }
 
-    public void setMazeGfx(MazeGfx mazeGfx) {
-        this.mazeGfx = mazeGfx;
+    public void setMovementController(MovementController movementController) {
+        this.movementController = movementController;
     }
 
-    public void setMovementDetector(MovementDetector movementDetector) {
-        this.movementDetector = movementDetector;
+    public boolean caught(Player player) {
+
+         return (pos.equals(player.getPos()) && player.isRetrieving());
+
     }
 
 
+    public void draw(Player[] players) {
+        //ghostGfx.draw();
 
-    //getMessage method
+        if (players[0].checkVisibility(pos) ||
+                players[1].checkVisibility(pos)) {
 
-    public void getMessage() {
-        System.out.println("*UUUUUUUUUUUHH*");
+            ghostGfx.draw();
+
+        } else {
+
+            ghostGfx.delete();
+
+        }
     }
 
- */
+    public void hide() {
+        ghostGfx.delete();
+    }
 }

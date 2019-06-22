@@ -16,8 +16,8 @@ public enum Directions {
         this.moveRow = moveRow;
     }
 
-    public Directions getOppositeDirection() {
-        return values()[oppositeDirection];
+    public int getOppositeDirection() {
+        return oppositeDirection;
     }
 
     public int getMoveCol() {
