@@ -54,8 +54,12 @@ public class Ghost extends Thread{
         while (true) {
 
             try {
-                Thread.sleep(250);
-                motionControl();
+                Thread.sleep(250 + (int)(Math.random()*10-5));
+                if (movementController.askForToken()) {
+                    motionControl();
+                    movementController.returnToken();
+                }
+
             } catch (InterruptedException iEx) {
                 System.out.println("Interrupted Exception.");
             }
@@ -66,16 +70,12 @@ public class Ghost extends Thread{
 
 
     //move method
-    public void motionControl(){
-
-        System.out.println(moveVerifier[2]);
+    private void motionControl(){
 
         moveVerifier[0] = movementController.checkMove(pos, Directions.UP);
         moveVerifier[1] = movementController.checkMove(pos, Directions.RIGHT);
         moveVerifier[3] = movementController.checkMove(pos, Directions.LEFT);
         moveVerifier[2] = movementController.checkMove(pos, Directions.DOWN);
-
-        System.out.println(moveVerifier[2]);
 
         int countPossibleMoves = 0;
 
@@ -118,7 +118,7 @@ public class Ghost extends Thread{
 
         int[] pos = {col, row};
 
-        System.out.println(col + ", " + row);
+        //System.out.println(col + ", " + row);
 
         if(col%2 != 0 && row%2 != 0) {
             return pos;
@@ -140,16 +140,13 @@ public class Ghost extends Thread{
 
     public void draw(Player[] players) {
         //ghostGfx.draw();
-
         if (players[0].checkVisibility(pos) ||
-                players[1].checkVisibility(pos)) {
+            players[1].checkVisibility(pos)) {
 
-            ghostGfx.draw();
+                ghostGfx.draw();
 
         } else {
-
             ghostGfx.delete();
-
         }
     }
 

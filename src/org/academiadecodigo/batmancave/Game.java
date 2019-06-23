@@ -5,12 +5,8 @@ import org.academiadecodigo.batmancave.Player.PlayerOne;
 import org.academiadecodigo.batmancave.Player.PlayerTwo;
 import org.academiadecodigo.batmancave.gameobjects.Crystal;
 import org.academiadecodigo.batmancave.maze.Maze;
-import org.academiadecodigo.batmancave.maze.MovementDetector;
-import org.academiadecodigo.batmancave.gameobjects.Usables.*;
 import org.academiadecodigo.batmancave.gameobjects.enemies.Ghost;
 
-import java.io.File;
-import java.net.URL;
 
 public class Game {
 
@@ -21,28 +17,18 @@ public class Game {
     private MovementController movementController;
     private Player[] players;
     private Ghost[] ghosts;
-    private Flag flag;
-    private boolean roundEnd;
-    private int[] points;
-    private GameStage stage;
 
     //Audio
     private Sound sound = new Sound();
 
-    private File mainTheme = new File("workspace/myrepos/batman-cave/resources/startSong.wav");
-    private File boo = new File("./resources/GOTCHA_BITCH.wav");
-    private File escapeSong = new File("./resources/Danger.wav");
-    private File powerUp = new File("./resources/Power_1.wav");
-    private File hit = new File("./resources/moaning-woman_1.wav");
-
-
-
-    private URL file = getClass().getResource("resources/Danger.wav");
+    private String mainTheme = "/resources/startSong.wav";
+    private String boo = "/resources/GOTCHA_BITCH.wav";
+    private String escapeSong = "/resources/Danger.wav";
+    private String powerUp = "/resources/Power_1.wav";
+    private String hit = "/resources/moaning-woman_1.wav";
 
     //Constructor
     public Game() {
-
-        points = new int[]{0,0};
 
         maze = new Maze(41, 31);
 
@@ -57,16 +43,30 @@ public class Game {
     }
 
 
+    public void menu() {
+
+        try {
+            //sound.play(mainTheme, true);
+
+            menu = new Menu();
+
+            while (!menu.isGameStart()) {
+                Thread.sleep(500);
+            }
+            //sound.stop();
+            //sound.play(escapeSong, true);
+            init();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+    }
 
     //Init Method
     public void init() {
 
-        stage = GameStage.SEARCHING;
-
         maze.init();
         maze.generate();
-
-
 
         players[0].setMovementController(movementController);
         players[1].setMovementController(movementController);
@@ -78,22 +78,6 @@ public class Game {
         players[0].draw();
         players[1].draw();
 
-
-
-        start();
     }
-
-    public void start() {
-
-
-
-    }
-
-
-    private enum GameStage {
-        SEARCHING,
-        RETRIEVING
-    }
-
 
 }

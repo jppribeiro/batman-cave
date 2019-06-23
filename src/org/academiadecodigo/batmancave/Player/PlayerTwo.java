@@ -56,12 +56,13 @@ public class PlayerTwo extends Player {
 
     private void move(Directions direction) {
 
-        if (movementController.checkMove(pos, direction)) {
+        if (movementController.checkMove(pos, direction) && movementController.askForToken()) {
 
             pos.changePosition(direction.getMoveCol(), direction.getMoveRow());
             getPlayerGfx().translate(direction.getMoveCol() * MazeGFX.CELLSIZE, direction.getMoveRow() * MazeGFX.CELLSIZE);
 
             movementController.signalMove(GameEntities.PLAYER);
+            movementController.returnToken();
         }
     }
 

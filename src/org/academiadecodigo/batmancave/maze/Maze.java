@@ -74,6 +74,7 @@ public class Maze {
 
     public void draw(Player[] players) {
         mazeGFX.draw(layout, players);
+
     }
 
 

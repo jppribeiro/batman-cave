@@ -39,10 +39,10 @@ public class Menu implements KeyboardHandler {
         title = new Picture(376, 180, "resources/Menu/tittle.png");
         start = new Picture(483, 550, "resources/Menu/buttons/Start.png");
         quit = new Picture(483, 650, "resources/Menu/buttons/Quit.png");
-        button = new Picture(483, 550, "resources/Menu/buttons/button.png");
-        button1 = new Picture(483, 650, "resources/Menu/buttons/button.png");
-        buttonPressed = new Picture(483, 550, "resources/Menu/buttons/button_pressed.png");
-        buttonPressed1 = new Picture(483, 650, "resources/Menu/buttons/button_pressed.png");
+        button = new Picture(483, 550, "resources/Menu/buttons/Button.png");
+        button1 = new Picture(483, 650, "resources/Menu/buttons/Button.png");
+        buttonPressed = new Picture(483, 550, "resources/Menu/buttons/Button_pressed.png");
+        buttonPressed1 = new Picture(483, 650, "resources/Menu/buttons/Button_pressed.png");
         pressSpace = new Picture(539, 565, "resources/Menu/buttons/Press_space.png");
         pressEsc = new Picture(539, 665, "resources/Menu/buttons/Press_esc.png");
         title.draw();

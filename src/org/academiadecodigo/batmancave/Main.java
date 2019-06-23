@@ -43,9 +43,9 @@ public class Main {
 
         Game game = new Game();
 
-        game.init();
+        //game.init();
 
-        //game.menu();
+        game.menu();
 
     }
 

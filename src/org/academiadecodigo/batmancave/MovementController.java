@@ -10,6 +10,9 @@ import org.academiadecodigo.batmancave.maze.CellType;
 import org.academiadecodigo.batmancave.maze.Directions;
 import org.academiadecodigo.batmancave.maze.Maze;
 
+import static org.academiadecodigo.batmancave.GameEntities.GHOST;
+import static org.academiadecodigo.batmancave.GameEntities.PLAYER;
+
 public class MovementController {
 
     private Maze maze;
@@ -19,6 +22,15 @@ public class MovementController {
     private boolean ghostsAwake;
     private GameStage stage;
 
+    /*
+    * Signal Token is used as a workaround for the fact that Simple Graphics uses an ArrayList to store all
+    * shapes in the Canvas. This is a problem when we have 5 threads moving and deleting shapes at the same
+    * time. When a Player or a Ghost want to move they must ask for the token. If the token is returned
+    * (only if its value is true) then the instance who asked for it may move, otherwise it must wait. When
+    * it is done moving it returns the token back to the movementController.
+    */
+    private boolean signalToken;
+
 
     public MovementController (Maze maze, Crystal crystal, Player[] players, Ghost[] ghosts) {
         this.maze = maze;
@@ -26,10 +38,14 @@ public class MovementController {
         this.players = players;
         this.ghosts = ghosts;
         ghostsAwake = false;
+        signalToken = true;
     }
 
 
     public void signalMove(GameEntities entity) {
+
+        /* THIS METHOD SHOULD ONLY BE ACCESSED AFTER A SIGNAL TOKEN HAS BEEN GRANTED*/
+
         // If a ghost or a player tries to move and checkMove() returns true then the entity that moved has to send
         // a signal that it has finished moving in order to check for game events and to redraw the screen.
 
@@ -86,8 +102,8 @@ public class MovementController {
         // TODO check if player won
 
 
-        // refresh game screen
-        refreshScreen(entity);
+            // refresh game screen
+            refreshScreen(entity);
 
     }
 
@@ -131,12 +147,6 @@ public class MovementController {
 
     private void refreshScreen(GameEntities entity) {
 
-        // ghosts are working in a separate thread:: If we don't have this switch we would get a nullPointerEx when signalMove() calls
-        // this method because the ghost would be calling the redraw of the entire maze at the same time
-
-        // GLITCH!! Right now ghosts are being redrawn each time they move. If we ALSO had them being redrawn when the player moved we
-        // would eventually get a nullPointerEx because we would be trying to delete something at the same time or accessing an array while deleting!
-
         switch (entity) {
             case PLAYER:
                 maze.draw(players);
@@ -149,19 +159,37 @@ public class MovementController {
                 players[0].draw();
                 players[1].draw();
 
-                break;
-            case GHOST:
                 for (Ghost ghost:
                         ghosts) {
-                    if (ghost != null) {
-                        // DRAW GHOST
+                    if(ghost != null) {
                         ghost.draw(players);
                     }
                 }
-            default:
-                break;
+            case GHOST:
+                for (Ghost ghost:
+                        ghosts) {
+                    if(ghost != null) {
+                        ghost.draw(players);
+                    }
+                }
         }
     }
+
+
+    // Methods to offer and retrieve the token
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    public boolean askForToken() {
+        if(signalToken) {
+            signalToken = false;
+            return true;
+        }
+        return false;
+    }
+
+    public void returnToken() {
+        signalToken = true;
+    }
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
     private enum GameStage {
