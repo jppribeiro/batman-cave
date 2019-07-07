@@ -149,7 +149,7 @@ public class MovementController {
 
         switch (entity) {
             case PLAYER:
-                maze.draw(players);
+                maze.draw();
 
                 crystal.draw(players);
 

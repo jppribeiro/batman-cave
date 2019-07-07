@@ -11,13 +11,17 @@ public class Cell {
     private CellType type;
     private Position pos;
     private boolean excavated;
-    private Picture cellGfx;
+    private boolean path;
+    private boolean visited;
+    private Rectangle cellGfx;
 
 
     public Cell(CellType type, int col, int row) {
         this.type = type;
         pos = new Position(col, row);
         excavated = false;
+        path = false;
+        visited = false;
     }
 
 
@@ -33,19 +37,37 @@ public class Cell {
         return excavated;
     }
 
+
+
     public void setType(CellType type) {
         this.type = type;
     }
 
-    public void setCellGfx(Picture cellGfx) {
+    public void setCellGfx(Rectangle cellGfx) {
         this.cellGfx = cellGfx;
     }
 
-    public Picture getCellGfx() {
+    public Rectangle getCellGfx() {
         return cellGfx;
     }
 
     public void excavate() {
         excavated = true;
+    }
+
+    public boolean isPath() {
+        return path;
+    }
+
+    public void setPath(boolean path) {
+        this.path = path;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }

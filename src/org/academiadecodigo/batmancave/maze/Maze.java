@@ -3,21 +3,27 @@ package org.academiadecodigo.batmancave.maze;
 import org.academiadecodigo.batmancave.MovementController;
 import org.academiadecodigo.batmancave.Player.Player;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Maze {
 
     private Cell[][] layout;
     private Excavator excavator;
     private MazeGFX mazeGFX;
-    private MovementController movementController;
+    private PathFinder pathFinder;
 
     public Maze(int cols, int rows) {
         layout = new Cell[cols][rows];
         excavator = new Excavator(layout);
         mazeGFX = new MazeGFX();
+        pathFinder = new PathFinder(layout);
     }
 
     public void init() {
         // This method fills the layout with cells of type WALL or ROOM based in some rules to start excavating the maze
+
+
         for(int i = 0; i < layout.length; i++) {
             for(int j = 0; j < layout[i].length; j++) {
                if(i == 0 || i == layout.length - 1) {
@@ -71,9 +77,55 @@ public class Maze {
         mazeGFX.init(layout.length, layout[0].length);
     }
 
+    private void findPath() {
 
-    public void draw(Player[] players) {
-        mazeGFX.draw(layout, players);
+        int[] start = {1,1};
+        int[] nextMove = {1, 1};
+
+        pathFinder.getStack().empty();
+        pathFinder.getStack().push(start);
+
+        while(nextMove[0] != layout.length - 2 || nextMove[1] != layout[0].length - 2) {
+
+            //printMaze();
+            nextMove = pathFinder.move();
+
+
+
+            if(nextMove[0] == 0 && nextMove[1] == 0) {
+                pathFinder.getStack().pop();
+            } else {
+                pathFinder.getStack().push(nextMove);
+            }
+
+            System.out.println( nextMove[0] + " " + nextMove[1]);
+            System.out.println(layout.length + " " + layout[0].length);
+
+            System.out.println(pathFinder.getNumSteps());
+            pathFinder.addStep();
+
+            if (pathFinder.getNumSteps() > 16000) {
+                break;
+            }
+        }
+    }
+
+    public void draw() {
+
+        findPath();
+        activatePath();
+        mazeGFX.draw(layout);
+
+    }
+
+    public void activatePath() {
+
+        for (int[] coord:
+             pathFinder.getStack()) {
+
+            layout[coord[0]][coord[1]].setPath(true);
+
+        }
 
     }
 
@@ -102,7 +154,4 @@ public class Maze {
         return layout;
     }
 
-    public void setMovementController(MovementController movementController) {
-        this.movementController = movementController;
-    }
 }
